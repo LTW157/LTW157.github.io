@@ -1,0 +1,922 @@
+<!DOCTYPE HTML>
+<html lang="">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="react-cropper + antdesign +dva 实现裁剪图片并上传的功能, ltw的博客">
+    <meta name="description" content="react-cropper + antdesign +dva 实现裁剪图片并上传的功能一.首先安装react-cropper插件npm install –save react-cropper执行该命令以后，下载react-cropper依赖">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>react-cropper + antdesign +dva 实现裁剪图片并上传的功能 | ltw的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+</head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">ltw的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>Index</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>Tags</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>Categories</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>Archives</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>About</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>Friends</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="Search"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">ltw的博客</div>
+        <div class="logo-desc">
+            
+            潜心致力于前端开发
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                Index
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                Tags
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                Categories
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                Archives
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                About
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                Friends
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        react-cropper + antdesign +dva 实现裁剪图片并上传的功能
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2019-08-05
+                </div>
+
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="react-cropper-antdesign-dva-实现裁剪图片并上传的功能"><a href="#react-cropper-antdesign-dva-实现裁剪图片并上传的功能" class="headerlink" title="react-cropper + antdesign +dva 实现裁剪图片并上传的功能"></a><strong>react-cropper + antdesign +dva 实现裁剪图片并上传的功能</strong></h2><p>一.<strong>首先安装react-cropper插件</strong><br>npm install –save react-cropper<br>执行该命令以后，下载react-cropper依赖信息自动更新到package.json中<br>在使用该插件的代码中需要进行引入</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"cropperjs/dist/cropper.css"</span></span><br><span class="line"><span class="keyword">import</span> Cropper <span class="keyword">from</span> <span class="string">'react-cropper'</span></span><br></pre></td></tr></table></figure>
+
+<p>二.<strong>如下列出相应插件的文档以供参考</strong></p>
+<p>react-cropper文档：<a href="https://www.npmjs.com/package/react-cropperjs" target="_blank" rel="noopener">https://www.npmjs.com/package/react-cropperjs</a><br>官方cropper文档：<a href="https://fengyuanchen.github.io/cropper/" target="_blank" rel="noopener">https://fengyuanchen.github.io/cropper/</a><br>一个作者总结的相关插件的中文版文档：<a href="https://blog.csdn.net/weixin_38023551/article/details/78792400" target="_blank" rel="noopener">https://blog.csdn.net/weixin_38023551/article/details/78792400</a></p>
+<p>三.<strong>主要的实现的功能</strong></p>
+<p>使用antdesign的upload组件进行上传图片，并调用react-cropper组件实现固定长和宽的截图，将截图的结果以FILE格式传给后台。实现效果如下。<br><img src="https://img-blog.csdnimg.cn/20190319090710800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NDAwMjA2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以上传多张图片。<br><img src="https://img-blog.csdnimg.cn/20190319090808384.png" alt="在这里插入图片描述"><br>四.<strong>主要的思路</strong><br>首先构建一个CropperUpload组件，该组件接收截图框的长，宽，Upload样式模式，初始图片列表四个参数。该组件主要实现上传可截图的图片的功能，在Upload组件的beforeUpload中用FileReader读取要上传的文件的base64码，并返回false阻止Upload组件自动上传，将文件码赋值给cropper组件，用cropper进行截图，截图之后，将cropper返回的base64码转换成File格式传向后台。</p>
+<p>五.<strong>具体函数的实现</strong><br>1.首先需要一个ant的Upload组件，在这里主要用到这个组件的三个重要参数，beforeUpload上传图片之前触发的回调，onRemove删除图片的回调，fileList已上传图片的列表。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">	&lt;Upload</span><br><span class="line">          name=<span class="string">"files"</span></span><br><span class="line">          listType=&#123;<span class="keyword">this</span>.state.pattern === <span class="number">1</span> ? <span class="string">" "</span> : <span class="keyword">this</span>.state.pattern === <span class="number">2</span> ? <span class="string">"picture-card"</span> : <span class="string">"picture"</span>&#125;</span><br><span class="line">          className=&#123;<span class="keyword">this</span>.state.pattern === <span class="number">3</span> ? styles.uploadinline : <span class="string">""</span>&#125;</span><br><span class="line">          beforeUpload=&#123;<span class="keyword">this</span>.beforeUpload.bind(<span class="keyword">this</span>)&#125;</span><br><span class="line">          onRemove=&#123;<span class="keyword">this</span>.handleRemove.bind(<span class="keyword">this</span>)&#125;</span><br><span class="line">          fileList=&#123;<span class="keyword">this</span>.state.fileList&#125;</span><br><span class="line">        &gt;</span><br><span class="line">          &#123;botton&#125;</span><br><span class="line">     &lt;<span class="regexp">/Upload&gt;</span></span><br><span class="line"><span class="regexp">12345678910</span></span><br></pre></td></tr></table></figure>
+
+<p>其他的listType主要是支持Upload不同的样式模式。如图所示的三种模式。<br><img src="https://img-blog.csdnimg.cn/20190318192451349.png" alt="在这里插入图片描述"><img src="https://img-blog.csdnimg.cn/2019031819175410.png" alt="在这里插入图片描述"><img src="https://img-blog.csdnimg.cn/20190318192147727.png" alt="在这里插入图片描述"><br>点击上传图片按钮会触发beforeUpload函数，如果想获取通过input选择的文件的数据，我们就需要使用到js封装好的FileReader对象。并通过input.files[0]来获取点击上传的文件对象，在这里因为用了Upload组件，该组件已经封装好了，此时会通过beforeUpload的file参数传递进来，文件对象里面包括文件大小（size），文件的名字（name）和文件类型（type），可以通过该文件类型来判断上传的文件是否是图片，判断的正则如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/image\/\w+<span class="regexp">/.test(file.type)</span></span><br><span class="line"><span class="regexp">1</span></span><br></pre></td></tr></table></figure>
+
+<p>通过调用FileReader来读取文件，文件读取结束之后会调用onload回调，在onload回调中，在通过image.onload回调（该回调是异步的）来获取图片的长宽，图片的长宽必须大于裁剪框的长宽，最后通过e.target.result来获取图片的base64码，将该码通过setSate设置给reactCropper的src中，src为裁剪插件的图片的源，在将包裹裁剪框的Modal框弹出，通过将Modal的visible设置为true，Model的visible在这里用state中的editImageModalVisible来控制，此时将弹出裁剪图片的裁剪框。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">// 特产介绍图片Upload上传之前函数</span></span><br><span class="line">  beforeUpload(file, fileList) &#123;</span><br><span class="line">    <span class="comment">//当打开同一张图片的时候清除上一次的缓存</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.refs.cropper) &#123;</span><br><span class="line">      <span class="keyword">this</span>.refs.cropper.reset();</span><br><span class="line">      <span class="keyword">this</span>.refs.cropper.setData(&#123;</span><br><span class="line">        width: <span class="keyword">this</span>.state.width,</span><br><span class="line">        height: <span class="keyword">this</span>.state.height,</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> isLt10M = file.size / <span class="number">1024</span> / <span class="number">1024</span> &lt; <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">if</span> (!isLt10M) &#123; <span class="comment">//添加文件限制</span></span><br><span class="line">      MsgBox.error(&#123; <span class="attr">content</span>: <span class="string">'文件大小不能超过10M'</span> &#125;);</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">    <span class="keyword">const</span> image = <span class="keyword">new</span> Image();</span><br><span class="line">    <span class="keyword">var</span> height;</span><br><span class="line">    <span class="keyword">var</span> width;</span><br><span class="line">    <span class="comment">//因为读取文件需要时间,所以要在回调函数中使用读取的结果</span></span><br><span class="line">    reader.readAsDataURL(file); <span class="comment">//开始读取文件</span></span><br><span class="line"></span><br><span class="line">    reader.onload = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">      image.src = reader.result;</span><br><span class="line">      image.onload = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        height = image.naturalHeight;</span><br><span class="line">        width = image.naturalWidth;</span><br><span class="line">        <span class="keyword">if</span> (height &lt; <span class="keyword">this</span>.state.height || width &lt; <span class="keyword">this</span>.state.width) &#123;</span><br><span class="line">          message.error(<span class="string">'图片尺寸不对 宽应大于:'</span>+<span class="keyword">this</span>.state.width+ <span class="string">'高应大于:'</span> +<span class="keyword">this</span>.state.height );</span><br><span class="line">          <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">            editImageModalVisible: <span class="literal">false</span>, <span class="comment">//打开控制裁剪弹窗的变量，为true即弹窗</span></span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">          <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">            srcCropper: e.target.result, <span class="comment">//cropper的图片路径</span></span><br><span class="line">            selectImgName: file.name, <span class="comment">//文件名称</span></span><br><span class="line">            selectImgSize: (file.size / <span class="number">1024</span> / <span class="number">1024</span>), <span class="comment">//文件大小</span></span><br><span class="line">            selectImgSuffix: file.type.split(<span class="string">"/"</span>)[<span class="number">1</span>], <span class="comment">//文件类型</span></span><br><span class="line">            editImageModalVisible: <span class="literal">true</span>, <span class="comment">//打开控制裁剪弹窗的变量，为true即弹窗</span></span><br><span class="line">          &#125;)</span><br><span class="line">          <span class="keyword">if</span> (<span class="keyword">this</span>.refs.cropper) &#123;</span><br><span class="line">            <span class="keyword">this</span>.refs.cropper.replace(e.target.result);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="number">1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950</span></span><br></pre></td></tr></table></figure>
+
+<p>裁剪框的设置如下，src是裁剪框图片的路径，ref为该组件真实实例的引用，viewMode在这里选择了模式1，zoomable是否允许放大图像，movable是否允许移动图像，在这里设置了ready函数，当一个cropper实例完全构建时，这个事件就会发生，用于在每一次裁剪之前都重新设置一下裁剪框大小，否则他会自动的恢复默认原图像0.8比例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> 		&lt;Cropper</span><br><span class="line">            src=&#123;<span class="keyword">this</span>.state.srcCropper&#125; <span class="comment">//图片路径，即是base64的值，在Upload上传的时候获取到的</span></span><br><span class="line">            ref=<span class="string">"cropper"</span></span><br><span class="line">            viewMode=&#123;<span class="number">1</span>&#125; <span class="comment">//定义cropper的视图模式</span></span><br><span class="line">            zoomable=&#123;<span class="literal">true</span>&#125; <span class="comment">//是否允许放大图像</span></span><br><span class="line">            movable=&#123;<span class="literal">true</span>&#125;</span><br><span class="line">            guides=&#123;<span class="literal">true</span>&#125; <span class="comment">//显示在裁剪框上方的虚线</span></span><br><span class="line">            background=&#123;<span class="literal">false</span>&#125; <span class="comment">//是否显示背景的马赛克</span></span><br><span class="line">            rotatable=&#123;<span class="literal">false</span>&#125; <span class="comment">//是否旋转</span></span><br><span class="line">            style=&#123;&#123; <span class="attr">height</span>: <span class="string">'100%'</span>, <span class="attr">width</span>: <span class="string">'100%'</span> &#125;&#125;</span><br><span class="line">            cropBoxResizable=&#123;<span class="literal">false</span>&#125;<span class="comment">//是否可以拖拽</span></span><br><span class="line">            cropBoxMovable=&#123;<span class="literal">true</span>&#125;<span class="comment">//是否可以移动裁剪框</span></span><br><span class="line">            dragMode=<span class="string">"move"</span></span><br><span class="line">            center=&#123;<span class="literal">true</span>&#125;</span><br><span class="line">            ready=&#123;<span class="keyword">this</span>._ready.bind(<span class="keyword">this</span>)&#125;</span><br><span class="line">          /&gt;</span><br><span class="line"><span class="number">12345678910111213141516</span></span><br></pre></td></tr></table></figure>
+
+<p>裁剪框父组件设置如下，可见与不可见通过页面的stated的editImageModalVisible来控制，当上传图片时此状态设置为true显示裁剪框，当上传图片成功，或者关闭裁剪框的时候将此状态设置为false关闭裁剪框，Modal组件的高度是自适应组件内的图片高度的，宽度并不自适应图片的宽度，若不设置将会有默认的宽度，因此在这里设置为100%，当裁剪完成点击保存触发saveImg函数回调，当点击取消的时候触发handleCancle回调。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">       &lt;Modal</span><br><span class="line">          key=<span class="string">"cropper_img_icon_key"</span></span><br><span class="line">          visible=&#123;<span class="keyword">this</span>.state.editImageModalVisible&#125;</span><br><span class="line">          width=<span class="string">"600"</span></span><br><span class="line">          footer=&#123;[</span><br><span class="line">            &lt;Button type=<span class="string">"primary"</span> onClick=&#123;<span class="keyword">this</span>.saveImg.bind(<span class="keyword">this</span>)&#125; &gt;保存&lt;<span class="regexp">/Button&gt;,</span></span><br><span class="line"><span class="regexp">            &lt;Button onClick=&#123;this.handleCancel.bind(this)&#125; &gt;取消&lt;/</span>Button&gt;</span><br><span class="line">          ]&#125;&gt;</span><br><span class="line">        &lt;<span class="regexp">/Modal&gt;</span></span><br><span class="line"><span class="regexp">123456789</span></span><br></pre></td></tr></table></figure>
+
+<p>点击保存按钮之后，触发saveImg函数，要使用FormData向后台传数据，并且传输的是格式是FILE格式的，因此现将截图的结果取出，取出的时候使用this.refs.cropper.getCroppedCanvas().toDataURL()，最终取出的是截图后图片的base64码，通过dataURLtoFile函数将base64转换成FILE，封装到formdata中，调用后台的一个接口postimage。后台将返回一个图片的路径给前台。前台将路径取出，并按照Upload组件图片列表默认显示的格式来构建，最终push到fileList中，显示在Upload组件上。并将state中editImageModalVisible的状态置为false，关闭Modal裁剪框。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">saveImg() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; dispatch &#125; = <span class="keyword">this</span>.props;</span><br><span class="line">    <span class="keyword">var</span> formdata = <span class="keyword">new</span> FormData();</span><br><span class="line">    formdata.append(<span class="string">"files"</span>, <span class="keyword">this</span>.dataURLtoFile(<span class="keyword">this</span>.refs.cropper.getCroppedCanvas().toDataURL(), <span class="keyword">this</span>.state.selectImgName));</span><br><span class="line">    dispatch(&#123;</span><br><span class="line">      type: <span class="string">'getData/postimage'</span>,</span><br><span class="line">      payload: formdata,</span><br><span class="line">      callback: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; success, msg, obj &#125; = <span class="keyword">this</span>.props.imagePictures;</span><br><span class="line">        <span class="keyword">if</span> (success) &#123;</span><br><span class="line">          <span class="keyword">let</span> imageArry = <span class="keyword">this</span>.state.pattern == <span class="number">3</span> ? <span class="keyword">this</span>.state.fileList.slice() : [];</span><br><span class="line">          imageArry.push(&#123;</span><br><span class="line">            uid: <span class="built_in">Math</span>.random() * <span class="number">100000</span>,</span><br><span class="line">            name: <span class="keyword">this</span>.state.selectImgName,</span><br><span class="line">            status: <span class="string">'done'</span>,</span><br><span class="line">            url: obj[<span class="number">0</span>].sourcePath,</span><br><span class="line">            <span class="comment">// url:obj[0].sourcePath,</span></span><br><span class="line">            thumbUrl: <span class="keyword">this</span>.refs.cropper.getCroppedCanvas().toDataURL(),</span><br><span class="line">            thumbnailPath: obj[<span class="number">0</span>].thumbnailPath,</span><br><span class="line">            largePath: obj[<span class="number">0</span>].largePath,</span><br><span class="line">            mediumPath: obj[<span class="number">0</span>].mediumPath,</span><br><span class="line">            upload: <span class="literal">true</span>,</span><br><span class="line">          &#125;)</span><br><span class="line">          <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">            fileList: imageArry,</span><br><span class="line">            editImageModalVisible: <span class="literal">false</span>, <span class="comment">//打开控制裁剪弹窗的变量，为true即弹窗</span></span><br><span class="line">            srcCropper: <span class="keyword">this</span>.state.srcCropper, <span class="comment">//cropper的图片路径</span></span><br><span class="line">          &#125;)</span><br><span class="line">          <span class="keyword">this</span>.props.onChange(imageArry);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">          message.error(msg);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="number">123456789101112131415161718192021222324252627282930313233343536</span></span><br></pre></td></tr></table></figure>
+
+<p>在modal中调用getData的postimage向后台发送数据，现在附上请求头的设置部分，因为传递的数据已经用formdata封装上了，因此直接就传递给后台就可以。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">request</span>(<span class="params">url, options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> defaultOptions = &#123;</span><br><span class="line">    credentials: <span class="string">'include'</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> newOptions = &#123; ...defaultOptions, ...options &#125;;</span><br><span class="line">  <span class="keyword">if</span> (newOptions.method === <span class="string">'POST'</span> || newOptions.method === <span class="string">'PUT'</span>) &#123;</span><br><span class="line">      newOptions.method = <span class="string">'POST'</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> fetch(url, newOptions)</span><br><span class="line">    .then(checkStatus)</span><br><span class="line">    .then(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (newOptions.method === <span class="string">'DELETE'</span> || response.status === <span class="number">204</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> response.text();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> response.json();</span><br><span class="line">    &#125;)</span><br><span class="line">    .catch(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> &#123; dispatch &#125; = store;</span><br><span class="line">      <span class="keyword">const</span> status = e.name;</span><br><span class="line">      <span class="keyword">if</span> (status === <span class="number">401</span>) &#123;</span><br><span class="line">        dispatch(routerRedux.push(<span class="string">'/user/login'</span>));</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">12345678910111213141516171819202122232425</span></span><br></pre></td></tr></table></figure>
+
+<p>向后台发送图片的请求头：<br><img src="https://img-blog.csdnimg.cn/2019031820052933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NDAwMjA2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>后传传输回数据：图片存储的路径，分为不同种的格式，大图，小图，中图，原图。<br><img src="https://img-blog.csdnimg.cn/2019031820054873.png" alt="在这里插入图片描述"><br>六<strong>遇到的问题</strong><br>上面流程看似简单，可是在实际开发中遇到了无数的困难！下面给大家分享我的经历。<br>1.<strong>beforeUpload组件问题</strong><br>当Upload组件调用beforeUpload函数的时候，如果函数的返回值是false的时候，就会清空fileList，所以每次参数fileList之中都只有当前的图片，没有之前上传过的，这是因为当beforeUpload函数返回时false的时候，会自动触发onChange函数，触发时fileList中只有当前的上传的图片，因此若再用onChange函数中调用setState来维护fileList就会将之前的图片都清除。因此在这种完全阻止自动上传的情景下就应该将onChange函回调函数删除。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> &lt;Upload</span><br><span class="line">          name=<span class="string">"files"</span></span><br><span class="line">          action=<span class="string">"/hyapi/resource/image/multisize/upload"</span></span><br><span class="line">          beforeUpload=&#123;<span class="keyword">this</span>.beforeUpload.bind(<span class="keyword">this</span>)&#125;</span><br><span class="line">          onRemove=&#123;<span class="keyword">this</span>.handleRemove.bind(<span class="keyword">this</span>)&#125;</span><br><span class="line">          fileList=&#123;<span class="keyword">this</span>.state.fileList&#125;</span><br><span class="line">          <span class="comment">//onChange=&#123;this.onChange&#125;//这里将不使用onChange回调</span></span><br><span class="line">        &gt;</span><br><span class="line">          &#123;botton&#125;</span><br><span class="line">        &lt;<span class="regexp">/Upload&gt;</span></span><br><span class="line"><span class="regexp">12345678910</span></span><br></pre></td></tr></table></figure>
+
+<p>2.<strong>对同一张图片进行截图的问题</strong><br>当对一张图片进行截图，调整了图片的位置和缩放，下次再打开同一张图片，还会保留有上一次的记录。<br>第一次打开的位置：<br><img src="https://img-blog.csdnimg.cn/20190319193801440.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NDAwMjA2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>改变图片大小和位置：<br><img src="https://img-blog.csdnimg.cn/20190319193924175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NDAwMjA2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>再次打开时候还是上图所示位置，cropper对同一张图片没有重新的渲染。cropper组件有一个ready函数，每一次截图准备完毕之前都会调用，在ready里面打印，发现同一张图片连续上传，只有第一次会调用ready。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  _ready() &#123;</span><br><span class="line">    <span class="keyword">this</span>.refs.cropper.setData(&#123;</span><br><span class="line">      width: <span class="keyword">this</span>.state.width,</span><br><span class="line">      height: <span class="keyword">this</span>.state.height,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="number">123456</span></span><br></pre></td></tr></table></figure>
+
+<p>这说明对同一张图片，cropper不会重新渲染，所以就要手动在每次弹出截图框的时候进行reset一下，因此在beforeUpload函数中进行恢复初始化操作。调用this.refs.cropper.reset()，并重新设置裁剪框的宽和高，否则会恢复默认原图的0.8比例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">beforeUpload(file, fileList) &#123;</span><br><span class="line">  <span class="comment">//当打开同一张图片的时候清除上一次的缓存</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.refs.cropper) &#123;</span><br><span class="line">    <span class="keyword">this</span>.refs.cropper.reset();</span><br><span class="line">    <span class="keyword">this</span>.refs.cropper.setData(&#123;</span><br><span class="line">      width: <span class="keyword">this</span>.state.width,</span><br><span class="line">      height: <span class="keyword">this</span>.state.height,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"><span class="number">123456789</span></span><br></pre></td></tr></table></figure>
+
+<p>3.<strong>多次截图后面图片会变小，容器变成默认的200*100</strong><br>第一次上传图片截图时正常，图片大小为原始图片大小<br><img src="https://img-blog.csdnimg.cn/20190319193801440.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NDAwMjA2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>后来在截图发现图片会压缩成很小，查看样式发现为cropper-container恢复默认值200*100<br><img src="https://img-blog.csdnimg.cn/20190319194621778.png" alt="在这里插入图片描述"><br>发现单纯的通过setState改变cropper的src有时并不能使图片将cropper容器撑开，达到重新渲染组件的目的，后来查看了官方文档，发现有一个参数replace(url)，作用替换图像的src并重新构建cropper，尝试了一下发现可以重新构建cropper，达到图片撑开容器而不是显示容器默认值得效果。并且加上这个参数之后。连续上传同一张图片也不会显示上一次默认的值了，同一张图片也会当做一张新的图片重新渲染，所以每次给cropper赋值的时候，调用replace函数十分重要，而不是单纯的靠改变cropper的src来实现重新渲染裁剪插件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.setState(&#123;</span><br><span class="line">          srcCropper: e.target.result, <span class="comment">//cropper的图片路径</span></span><br><span class="line">          selectImgName: file.name, <span class="comment">//文件名称</span></span><br><span class="line">          selectImgSize: (file.size / <span class="number">1024</span> / <span class="number">1024</span>), <span class="comment">//文件大小</span></span><br><span class="line">          selectImgSuffix: file.type.split(<span class="string">"/"</span>)[<span class="number">1</span>], <span class="comment">//文件类型</span></span><br><span class="line">          editImageModalVisible: <span class="literal">true</span>, <span class="comment">//打开控制裁剪弹窗的变量，为true即弹窗</span></span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.refs.cropper) &#123;</span><br><span class="line">          <span class="keyword">this</span>.refs.cropper.replace(e.target.result);</span><br><span class="line">        &#125;</span><br><span class="line"><span class="number">12345678910</span></span><br></pre></td></tr></table></figure>
+
+<p>4.<strong>用fetch向后台传输File格式文件，头文件设置问题</strong><br>将File绑定在formdata里面之后，向后台传递时候，起初手动设置了头文件Content-Type=multipart/form-data，向后台发送数据失败，头文件显示如下，显示的结果没有正常情况下的boundary<br><img src="https://img-blog.csdnimg.cn/20190319200533547.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NDAwMjA2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>看了原生ajax传递数据的代码如下，将contentType设置为false，不设置头文件。因此尝试在fetch时候，不设置contentType的内容。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">          url: <span class="string">"upload.ashx"</span>,</span><br><span class="line">                type: <span class="string">"POST"</span>,</span><br><span class="line">                data: formData,</span><br><span class="line">                <span class="comment">/**</span></span><br><span class="line"><span class="comment">                *必须false才会自动加上正确的Content-Type</span></span><br><span class="line"><span class="comment">                */</span></span><br><span class="line">                contentType: <span class="literal">false</span>,</span><br><span class="line">                <span class="comment">/**</span></span><br><span class="line"><span class="comment">                * 必须false才会避开jQuery对 formdata 的默认处理</span></span><br><span class="line"><span class="comment">                * XMLHttpRequest会对 formdata 进行正确的处理</span></span><br><span class="line"><span class="comment">                */</span></span><br><span class="line">                processData: <span class="literal">false</span>,</span><br><span class="line">                success: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (data.status == <span class="string">"true"</span>) &#123;</span><br><span class="line">                        alert(<span class="string">"上传成功！"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (data.status == <span class="string">"error"</span>) &#123;</span><br><span class="line">                        alert(data.msg);</span><br><span class="line">                    &#125;</span><br><span class="line">                    $(<span class="string">"#imgWait"</span>).hide();</span><br><span class="line">                &#125;,</span><br><span class="line">                error: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                    alert(<span class="string">"上传失败！"</span>);</span><br><span class="line">                    $(<span class="string">"#imgWait"</span>).hide();</span><br><span class="line">                &#125;</span><br><span class="line">         &#125;)</span><br><span class="line"><span class="number">123456789101112131415161718192021222324252627</span></span><br></pre></td></tr></table></figure>
+
+<p>之后再向后台传递的时候，头文件就显示为正常，自动设置了boundary<br><img src="https://img-blog.csdnimg.cn/20190319201147310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NDAwMjA2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>以上是所有开发中遇到的问题，欢迎大家一起来讨论</p>
+<p>七.<strong>完整代码部分</strong><br>自己封装的cropper-upload组件完整代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; PureComponent &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> moment <span class="keyword">from</span> <span class="string">'moment'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; routerRedux, Route, Switch, Link &#125; <span class="keyword">from</span> <span class="string">'dva/router'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Upload, Button, Modal, Icon, message &#125; <span class="keyword">from</span> <span class="string">'antd'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">"cropperjs/dist/cropper.css"</span></span><br><span class="line"><span class="keyword">import</span> Cropper <span class="keyword">from</span> <span class="string">'react-cropper'</span></span><br><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">'dva'</span>;</span><br><span class="line"><span class="keyword">import</span> styles <span class="keyword">from</span> <span class="string">'./Upload.less'</span>;</span><br><span class="line"></span><br><span class="line">@connect(<span class="function"><span class="params">state</span> =&gt;</span> (&#123;</span><br><span class="line">imagePictures: state.getData.imagePictures,</span><br><span class="line">&#125;))</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CropperUpload</span> <span class="keyword">extends</span> <span class="title">PureComponent</span> </span>&#123;</span><br><span class="line"><span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">  <span class="keyword">super</span>(props);</span><br><span class="line">  <span class="built_in">console</span>.log(props);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"props"</span>);</span><br><span class="line">  <span class="keyword">this</span>.state = &#123;</span><br><span class="line">    width: props.width,</span><br><span class="line">    height: props.height,</span><br><span class="line">    pattern: props.pattern,</span><br><span class="line">    fileList: props.fileList ? props.fileList : [],</span><br><span class="line">    editImageModalVisible: <span class="literal">false</span>,</span><br><span class="line">    srcCropper: <span class="string">''</span>,</span><br><span class="line">    selectImgName: <span class="string">''</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">componentWillReceiveProps(nextProps) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="string">'fileList'</span> <span class="keyword">in</span> nextProps) &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      fileList: nextProps.fileList ? nextProps.fileList : [],</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">handleCancel = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">    editImageModalVisible: <span class="literal">false</span>,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 图片Upload上传之前函数</span></span><br><span class="line">beforeUpload(file, fileList) &#123;</span><br><span class="line">  <span class="keyword">const</span> isLt10M = file.size / <span class="number">1024</span> / <span class="number">1024</span> &lt; <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">if</span> (!isLt10M) &#123; <span class="comment">//添加文件限制</span></span><br><span class="line">    MsgBox.error(&#123; <span class="attr">content</span>: <span class="string">'文件大小不能超过10M'</span> &#125;);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">  <span class="keyword">const</span> image = <span class="keyword">new</span> Image();</span><br><span class="line">  <span class="keyword">var</span> height;</span><br><span class="line">  <span class="keyword">var</span> width;</span><br><span class="line">  <span class="comment">//因为读取文件需要时间,所以要在回调函数中使用读取的结果</span></span><br><span class="line">  reader.readAsDataURL(file); <span class="comment">//开始读取文件</span></span><br><span class="line">  reader.onload = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    image.src = reader.result;</span><br><span class="line">    image.onload = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      height = image.naturalHeight;</span><br><span class="line">      width = image.naturalWidth;</span><br><span class="line">      <span class="keyword">if</span> (height &lt; <span class="keyword">this</span>.state.height || width &lt; <span class="keyword">this</span>.state.width) &#123;</span><br><span class="line">        message.error(<span class="string">'图片尺寸不对 宽应大于:'</span>+<span class="keyword">this</span>.state.width+ <span class="string">'高应大于:'</span> +<span class="keyword">this</span>.state.height );</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">          editImageModalVisible: <span class="literal">false</span>, <span class="comment">//打开控制裁剪弹窗的变量，为true即弹窗</span></span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">          srcCropper: e.target.result, <span class="comment">//cropper的图片路径</span></span><br><span class="line">          selectImgName: file.name, <span class="comment">//文件名称</span></span><br><span class="line">          selectImgSize: (file.size / <span class="number">1024</span> / <span class="number">1024</span>), <span class="comment">//文件大小</span></span><br><span class="line">          selectImgSuffix: file.type.split(<span class="string">"/"</span>)[<span class="number">1</span>], <span class="comment">//文件类型</span></span><br><span class="line">          editImageModalVisible: <span class="literal">true</span>, <span class="comment">//打开控制裁剪弹窗的变量，为true即弹窗</span></span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.refs.cropper) &#123;</span><br><span class="line">          <span class="keyword">this</span>.refs.cropper.replace(e.target.result);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">handleRemove(file) &#123;</span><br><span class="line">  <span class="keyword">this</span>.setState(<span class="function">(<span class="params">state</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> index = state.fileList.indexOf(file);</span><br><span class="line">    <span class="keyword">const</span> newFileList = state.fileList.slice();</span><br><span class="line">    newFileList.splice(index, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">this</span>.props.onChange(newFileList);</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      fileList: newFileList,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将base64码转化成blob格式</span></span><br><span class="line">convertBase64UrlToBlob(base64Data) &#123;</span><br><span class="line">  <span class="keyword">var</span> byteString;</span><br><span class="line">  <span class="keyword">if</span> (base64Data.split(<span class="string">','</span>)[<span class="number">0</span>].indexOf(<span class="string">'base64'</span>) &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">    byteString = atob(base64Data.split(<span class="string">','</span>)[<span class="number">1</span>]);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    byteString = <span class="built_in">unescape</span>(base64Data.split(<span class="string">','</span>)[<span class="number">1</span>]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> mimeString = base64Data.split(<span class="string">','</span>)[<span class="number">0</span>].split(<span class="string">':'</span>)[<span class="number">1</span>].split(<span class="string">';'</span>)[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">var</span> ia = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(byteString.length);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; byteString.length; i++) &#123;</span><br><span class="line">    ia[i] = byteString.charCodeAt(i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Blob([ia], &#123; <span class="attr">type</span>: <span class="keyword">this</span>.state.selectImgSuffix &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将base64码转化为FILE格式</span></span><br><span class="line">dataURLtoFile(dataurl, filename) &#123;</span><br><span class="line">  <span class="keyword">var</span> arr = dataurl.split(<span class="string">','</span>),</span><br><span class="line">    mime = arr[<span class="number">0</span>].match(<span class="regexp">/:(.*?);/</span>)[<span class="number">1</span>],</span><br><span class="line">    bstr = atob(arr[<span class="number">1</span>]),</span><br><span class="line">    n = bstr.length,</span><br><span class="line">    u8arr = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(n);</span><br><span class="line">  <span class="keyword">while</span> (n--) &#123;</span><br><span class="line">    u8arr[n] = bstr.charCodeAt(n);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> File([u8arr], filename, &#123; <span class="attr">type</span>: mime &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_ready() &#123;</span><br><span class="line">  <span class="keyword">this</span>.refs.cropper.setData(&#123;</span><br><span class="line">    width: <span class="keyword">this</span>.state.width,</span><br><span class="line">    height: <span class="keyword">this</span>.state.height,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">saveImg() &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; dispatch &#125; = <span class="keyword">this</span>.props;</span><br><span class="line">  <span class="keyword">var</span> formdata = <span class="keyword">new</span> FormData();</span><br><span class="line">  formdata.append(<span class="string">"files"</span>, <span class="keyword">this</span>.dataURLtoFile(<span class="keyword">this</span>.refs.cropper.getCroppedCanvas().toDataURL(), <span class="keyword">this</span>.state.selectImgName));</span><br><span class="line">  dispatch(&#123;</span><br><span class="line">    type: <span class="string">'getData/postimage'</span>,</span><br><span class="line">    payload: formdata,</span><br><span class="line">    callback: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> &#123; success, msg, obj &#125; = <span class="keyword">this</span>.props.imagePictures;</span><br><span class="line">      <span class="keyword">if</span> (success) &#123;</span><br><span class="line">        <span class="keyword">let</span> imageArry = <span class="keyword">this</span>.state.pattern == <span class="number">3</span> ? <span class="keyword">this</span>.state.fileList.slice() : [];</span><br><span class="line">        imageArry.push(&#123;</span><br><span class="line">          uid: <span class="built_in">Math</span>.random() * <span class="number">100000</span>,</span><br><span class="line">          name: <span class="keyword">this</span>.state.selectImgName,</span><br><span class="line">          status: <span class="string">'done'</span>,</span><br><span class="line">          url: obj[<span class="number">0</span>].sourcePath,</span><br><span class="line">          <span class="comment">// url:obj[0].sourcePath,</span></span><br><span class="line">          thumbUrl: <span class="keyword">this</span>.refs.cropper.getCroppedCanvas().toDataURL(),</span><br><span class="line">          thumbnailPath: obj[<span class="number">0</span>].thumbnailPath,</span><br><span class="line">          largePath: obj[<span class="number">0</span>].largePath,</span><br><span class="line">          mediumPath: obj[<span class="number">0</span>].mediumPath,</span><br><span class="line">          upload: <span class="literal">true</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">          fileList: imageArry,</span><br><span class="line">          editImageModalVisible: <span class="literal">false</span>, <span class="comment">//打开控制裁剪弹窗的变量，为true即弹窗</span></span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">this</span>.props.onChange(imageArry);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        message.error(msg);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">render() &#123;</span><br><span class="line">  <span class="keyword">const</span> botton = <span class="keyword">this</span>.state.pattern == <span class="number">2</span> ?</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Icon type=<span class="string">"plus"</span> /&gt;</span><br><span class="line">      &lt;div className=<span class="string">"ant-upload-text"</span>&gt;Upload&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt; :</span><br><span class="line">    &lt;Button&gt;</span><br><span class="line">      &lt;Icon type=<span class="string">"upload"</span> /&gt;选择上传&lt;<span class="regexp">/Button&gt;</span></span><br><span class="line"><span class="regexp">  return (</span></span><br><span class="line"><span class="regexp">    &lt;div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;Upload</span></span><br><span class="line"><span class="regexp">        name="files"</span></span><br><span class="line"><span class="regexp">        action="/</span>hyapi/resource/image/multisize/upload<span class="string">"</span></span><br><span class="line"><span class="string">        listType=&#123;this.state.pattern === 1 ? "</span> <span class="string">" : this.state.pattern === 2 ? "</span>picture-card<span class="string">" : "</span>picture<span class="string">"&#125;</span></span><br><span class="line"><span class="string">        className=&#123;this.state.pattern === 3 ? styles.uploadinline : "</span><span class="string">"&#125;</span></span><br><span class="line"><span class="string">        beforeUpload=&#123;this.beforeUpload.bind(this)&#125;</span></span><br><span class="line"><span class="string">        onRemove=&#123;this.handleRemove.bind(this)&#125;</span></span><br><span class="line"><span class="string">        fileList=&#123;this.state.fileList&#125;</span></span><br><span class="line"><span class="string">      &gt;</span></span><br><span class="line"><span class="string">        &#123;botton&#125;</span></span><br><span class="line"><span class="string">      &lt;/Upload&gt;</span></span><br><span class="line"><span class="string">      &lt;Modal</span></span><br><span class="line"><span class="string">        key="</span>cropper_img_icon_key<span class="string">"</span></span><br><span class="line"><span class="string">        visible=&#123;this.state.editImageModalVisible&#125;</span></span><br><span class="line"><span class="string">        width="</span><span class="number">100</span>%<span class="string">"</span></span><br><span class="line"><span class="string">        footer=&#123;[</span></span><br><span class="line"><span class="string">          &lt;Button type="</span>primary<span class="string">" onClick=&#123;this.saveImg.bind(this)&#125; &gt;保存&lt;/Button&gt;,</span></span><br><span class="line"><span class="string">          &lt;Button onClick=&#123;this.handleCancel.bind(this)&#125; &gt;取消&lt;/Button&gt;</span></span><br><span class="line"><span class="string">        ]&#125;&gt;</span></span><br><span class="line"><span class="string">        &lt;Cropper</span></span><br><span class="line"><span class="string">          src=&#123;this.state.srcCropper&#125; //图片路径，即是base64的值，在Upload上传的时候获取到的</span></span><br><span class="line"><span class="string">          ref="</span>cropper<span class="string">"</span></span><br><span class="line"><span class="string">          preview="</span>.uploadCrop<span class="string">"</span></span><br><span class="line"><span class="string">          viewMode=&#123;1&#125; //定义cropper的视图模式</span></span><br><span class="line"><span class="string">          zoomable=&#123;true&#125; //是否允许放大图像</span></span><br><span class="line"><span class="string">          movable=&#123;true&#125;</span></span><br><span class="line"><span class="string">          guides=&#123;true&#125; //显示在裁剪框上方的虚线</span></span><br><span class="line"><span class="string">          background=&#123;false&#125; //是否显示背景的马赛克</span></span><br><span class="line"><span class="string">          rotatable=&#123;false&#125; //是否旋转</span></span><br><span class="line"><span class="string">          style=&#123;&#123; height: '100%', width: '100%' &#125;&#125;</span></span><br><span class="line"><span class="string">          cropBoxResizable=&#123;false&#125;</span></span><br><span class="line"><span class="string">          cropBoxMovable=&#123;true&#125;</span></span><br><span class="line"><span class="string">          dragMode="</span>move<span class="string">"</span></span><br><span class="line"><span class="string">          center=&#123;true&#125;</span></span><br><span class="line"><span class="string">          ready=&#123;this._ready.bind(this)&#125;</span></span><br><span class="line"><span class="string">        /&gt;</span></span><br><span class="line"><span class="string">      &lt;/Modal&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">  );</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">export default CropperUpload;</span></span><br><span class="line"><span class="string">123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166167168169170171172173174175176177178179180181182183184185186187188189190191192193194195196197198199200201202203204205206207208209210211212213214215216217218</span></span><br></pre></td></tr></table></figure>
+
+<p>页面具体调用范例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;CropperUpload</span><br><span class="line">     pattern=&#123;<span class="number">1</span>&#125;<span class="comment">//模式分为三种，1为只能上传一张图片，2为上传多张图片</span></span><br><span class="line">     width=&#123;<span class="number">375</span>&#125;</span><br><span class="line">     height=&#123;<span class="number">120</span>&#125;</span><br><span class="line">     onChange=&#123;<span class="keyword">this</span>.ChangeIconImage.bind(<span class="keyword">this</span>)&#125;</span><br><span class="line">     fileList=&#123;<span class="keyword">this</span>.state.iconUrl&#125;</span><br><span class="line">   /&gt;</span><br></pre></td></tr></table></figure>
+            </div>
+            <hr/>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone, qq, weibo, douban"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>Reprint policy</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《react-cropper + antdesign +dva 实现裁剪图片并上传的功能》
+                </span> by
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/08/05/react-cropper + antdesign +dva 实现裁剪图片并上传的功能/" property="cc:attributionName"
+               rel="cc:attributionURL">
+                John Doe
+            </a> is licensed under a
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">
+                Creative Commons Attribution 4.0 International License
+            </a> 
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2019/08/05/flex 实现筛子1-9点布局/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="flex 实现筛子1-9点布局">
+                        
+                        <span class="card-title">flex 实现筛子1-9点布局</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            flex 实现筛子1-9点布局123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-05
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            John Doe
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/08/05/hello-world/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        
+                        <span class="card-title">Hello World</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-08-05
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            John Doe
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://blinkfox.github.io/" target="_blank">Blinkfox</a>基于
+            <a href="https://hexo.io/" target="_blank">Hexo</a> 的
+            <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">hexo-theme-matery</a>主题搭建.
+
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:xxx@xx.xx" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=123123123" class="tooltipped" data-tooltip="QQ联系我: 123123123" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
